@@ -119,7 +119,7 @@ get_interesting_files() {
   # /etc/shadow
   print_section "File permissions"
   run "find / -perm -u=s -o -perm -g=s -type f 2>/dev/null"
-  run "find / -perm -o+w -not type l"
+  run "find / -perm -o+w -not -type l 2>/dev/null"
 }
 
 

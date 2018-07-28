@@ -52,8 +52,15 @@ print_cmd() {
 
 
 run() {
+  # Expansion and globbing can be a bit difficult when running commands with
+  # a wrapper so we'll give the option to run eval() on the string
+  use_eval=${2:false}
   print_cmd "$1"
-  $1
+  if [[ "$use_eval" == true ]]; then
+    eval $1
+  else
+    $1
+  fi
   ret="$?"
   printf "\n"
   return "$ret"
@@ -118,8 +125,10 @@ get_interesting_files() {
   # /etc/sudoers
   # /etc/shadow
   print_section "File permissions"
-  run "find / -perm -u=s -o -perm -g=s -type f 2>/dev/null"
-  run "find / -perm -o+w -not -type l 2>/dev/null"
+  # Find files with SUID or SGID. Ignore /proc and /dev
+  run "find / -perm -u=s -o -perm -g=s -type f -o \( -path '/proc' -o -path '/dev' \) -prune 2>/dev/null" "true"
+  # Find world-writeable files and directories. Ignore /proc and /dev
+  run "find / -perm -o+w -not -type l -o \( -path '/proc' -o -path '/dev' \) -prune 2>/dev/null" "true"
 }
 
 

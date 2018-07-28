@@ -102,12 +102,12 @@ get_basic_info() {
 get_network_info() {
   # /etc/sysconfig/network - redhat?
   print_section "Network info"
-  run "ifconfig -a" || run "ip a"
+  run "/sbin/ifconfig -a" || run "ip a"
   run "cat /etc/resolv.conf"
   run "cat /etc/networks"
   run "lsof -i"
   run "netstat -tulpn"
-  run "iptables -L"
+  run "/sbin/iptables -L"
 }
 
 

@@ -86,6 +86,7 @@ get_basic_info() {
   run "w"
   run "last"
   run "env"
+  run "cat /etc/crontab"
   run "crontab -l"
   run "ls -la /var/spool/cron"
   run "ls -la /etc/cron.*"
